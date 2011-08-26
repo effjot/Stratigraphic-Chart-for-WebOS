@@ -6,11 +6,14 @@
 ;;;; base-accuracy "awaiting ratified" in description!
 
 
-(defpackage #:stratigraphy
+(defpackage :stratigraphy
   (:use :common-lisp :json))
 
 
 ;;;; output file setup
+
+(defparameter *html-file* "../data/isc2009.html")
+(defparameter *json-file* "../data/isc2009.json")
 
 (defparameter *print-gssp* nil)
 
@@ -906,7 +909,7 @@ corresponding object.")
 
 ;;; Write HTML file
 
-(with-open-file (s "/tmp/isc2009.html" :direction :output :if-exists :supersede)
+(with-open-file (s *html-file* :direction :output :if-exists :supersede)
   (print-html-strat-table *eons* s))
 
 
@@ -934,7 +937,7 @@ corresponding object.")
                    "")
                (if text text ""))))))))
 
-(with-open-file (stream "/tmp/isc2009.json"
+(with-open-file (stream *json-file*
                         :direction :output :if-exists :supersede)
   (json:encode-json (mapcar (lambda (u) (alist-of-unit-data (get-unit u)))
                             (remove-if #'keywordp
