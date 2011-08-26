@@ -10,6 +10,7 @@
 *.o
 *.so
 *.fasl
+*.ipk
 
 # Packages #
 ############
