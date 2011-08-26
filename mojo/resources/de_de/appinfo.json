@@ -1,0 +1,9 @@
+{
+	"id":       "net.effjot.stratigraphy",
+	"vendor":   "Florian Jenn",
+	"title":    "Stratigraphie",
+        "keywords": ["Stratigraphie", "Zeitskala", "Geologie",
+                     "International Stratigraphic Chart" ],
+	"main":     "../../index.html",
+	"icon":     "../../images/icon.png"
+}

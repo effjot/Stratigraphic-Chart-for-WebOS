@@ -1,0 +1,12 @@
+[
+    {"source": "data/stratigraphic-data.js"},
+    {"source": "app/assistants/stage-assistant.js"},
+    {
+        "scenes": "table",
+        "source": "app/assistants/table-assistant.js"
+    },
+    {
+        "scenes": "details",
+        "source": "app/assistants/details-assistant.js"
+    }
+]

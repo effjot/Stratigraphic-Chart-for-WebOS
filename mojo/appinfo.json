@@ -1,0 +1,14 @@
+{
+	"id": "net.effjot.stratigraphy",
+	"version": "0.2.4",
+	"title": "Stratigraphy",
+	"vendor": "Florian Jenn",
+	"vendorurl": "http://www.effjot.net/",
+        "keywords": ["stratigraphy", "timescale", "geology",
+                     "international stratigraphic chart" ],
+        "type": "web",
+	"main": "index.html",
+	"icon": "images/icon.png",
+        "theme": "light",
+        "noDeprecatedStyles": "yes"
+}

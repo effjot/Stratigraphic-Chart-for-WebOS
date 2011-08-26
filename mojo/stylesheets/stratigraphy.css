@@ -1,0 +1,323 @@
+/*
+
+   Stratigraphy CSS
+
+   RGB colours based on International Stratigraphic Chart
+   http://www.stratigraphy.org/down.htm.
+   Some colours are different in the list of the Commission for the
+   Geological Map of the World (CGMW) and marked as "-cgwm"
+
+   No guarantee for correctness!  If you find an error, please tell me.
+
+   Compiled by Florian Jenn
+   http://blog.effjot.net/2008/11/stratigraphy-stylesheet/
+
+   Version 2.0, 03.11.2010 Colours for all stratigraphic units of the ISC2009,
+                           but without CGMW variants below period level.
+   Version 1.7, 23.10.2010 Ages for Quaternary, Neogene, Paleogene.
+   Version 1.6, 06.01.2010 Epochs for Triassic and Jurassic.
+   Version 1.5, 05.01.2009 Some epochs and ages (Cenozoic, Cretaceous).
+   Version 1.1, 05.01.2009 Some missing bright text colours fixed.
+   Version 1.0, 24.11.2008 Initial release.
+
+ */
+
+
+
+/* "Super-Eon" */
+
+.precambrian             { background: rgb(247, 67, 112); }
+
+
+/* Eons */
+
+.phanerozoic             { background: rgb(154, 217, 221); }
+  .phanerozoic-cgmw      { background: rgb(154, 217, 229); }
+.proterozoic             { background: rgb(247, 53, 99); }
+  .proterozoic-cgmw      { background: rgb(251, 154, 148); }
+.archean                 { background: rgb(240, 4, 127); }
+  .archean-cgmw          { background: rgb(240, 2, 127); }
+.hadean                  { background: rgb(174, 2, 126); /* CGMW: not def. */
+                           color: rgb(240, 240, 240); }
+
+
+/* Eras */
+
+.cenozoic                { background: rgb(242, 249, 29); }
+  .cenozoic-cgmw         { background: rgb(250, 253, 1); }
+.mesozoic                { background: rgb(103, 197, 202); }
+.paleozoic               { background: rgb(153, 192, 141); }
+
+.neoproterozoic          { background: rgb(254, 179, 66); }
+  .neoproterozoic-cgmw   { background: rgb(254, 179, 67); }
+.mesoproterozoic         { background: rgb(253, 180, 98); }
+  .mesoproterozoic-cgmw  { background: rgb(253, 180, 105); }
+.paleoproterozoic        { background: rgb(247, 67, 112); }
+  .paleoproterozoic-cgmw { background: rgb(247, 67, 115); }
+.neoarchean              { background: rgb(249, 155, 193); }
+  .neoarchean-cgmw       { background: rgb(249, 155, 197); }
+.mesoarchean             { background: rgb(247, 104, 169); }
+  .mesoarchean-cgmw      { background: rgb(234, 102, 177); }
+.paleoarchean            { background: rgb(244, 68, 159); }
+.eoarchean               { background: rgb(218, 3, 127); }
+  .eoarchean-cgmw        { background: rgb(218, 2, 127); }
+
+
+/* Periods */
+
+.quaternary              { background: rgb(249, 249, 127); }
+  .quaternary-cgmw       { background: rgb(254, 230, 146); }
+.neogene                 { background: rgb(255, 230, 25); }
+  .neogene-cgmw          { background: rgb(255, 232, 0); }
+.paleogene               { background: rgb(253, 154, 82); }
+
+.cretaceous              { background: rgb(127, 198, 78); }
+  .cretaceous-cgmw       { background: rgb(197, 229, 71); }
+.jurassic                { background: rgb(52, 178, 201); }
+  .jurassic-cgmw         { background: rgb(226, 244, 224); }
+.triassic                { background: rgb(129, 43, 146);
+                           color: rgb(240, 240, 240); }
+  .triassic-cgmw         { background: rgb(107, 71, 125);
+                           color: rgb(240, 240, 240); }
+
+.permian                 { background: rgb(240, 64, 40); }
+.carboniferous           { background: rgb(103, 165, 153);
+                           color: rgb(240, 240, 240); }
+  .carboniferous-cgmw    { background: rgb(103, 171, 160);
+                           color: rgb(240, 240, 240); }
+.devonian                { background: rgb(203, 140, 55); }
+.silurian                { background: rgb(179, 225, 182); }
+  .silurian-cgmw         { background: rgb(179, 226, 208); }
+.ordovician              { background: rgb(0, 146, 112);
+                           color: rgb(240, 240, 240); }
+.cambrian                { background: rgb(127, 160, 86);
+                           /* color: rgb(240, 240, 240); */ }
+  .cambrian-cgmw         { background: rgb(64, 133, 33);
+                           color: rgb(240, 240, 240); }
+
+.ediacaran               { background: rgb(254, 217, 106); }
+.cryogenian              { background: rgb(254, 204, 92); }
+.tonian                  { background: rgb(254, 191, 78); }
+.stenian                 { background: rgb(254, 217, 154); }
+.ectasian                { background: rgb(253, 204, 138); }
+.calymmian               { background: rgb(253, 192, 122); }
+.statherian              { background: rgb(248, 117, 167); }
+.orosirian               { background: rgb(247, 104, 152); }
+.rhyacian                { background: rgb(247, 91, 137); }
+.siderian                { background: rgb(247, 79, 124); }
+  /* CGMW: Proterozoic periods not defined */
+
+
+
+/* Subperiods (no CGMW) */
+
+.pennsylvanian           { background: rgb(153, 194, 181); }
+.mississippian           { background: rgb(141, 143, 102);
+                           color: rgb(240, 240, 240); }
+
+/* Epochs (no CGMW) */
+
+.holocene                { background: rgb(254, 242, 236); }
+.pleistocene             { background: rgb(255, 242, 174); }
+
+.pliocene                { background: rgb(255, 255, 153); }
+.miocene                 { background: rgb(255, 255, 0); }
+
+.oligocene               { background: rgb(253, 192, 122); }
+.eocene                  { background: rgb(253, 180, 108); }
+.paleocene               { background: rgb(253, 167, 95); }
+
+.upper-cretaceous        { background: rgb(166, 216, 74); }
+.lower-cretaceous        { background: rgb(140, 205, 87); }
+
+.upper-jurassic          { background: rgb(179, 227, 239); }
+.middle-jurassic         { background: rgb(128, 207, 216); }
+.lower-jurassic          { background: rgb( 66, 174, 208); }
+
+.upper-triassic          { background: rgb(189, 140, 195); }
+.middle-triassic         { background: rgb(177, 104, 177); }
+.lower-triassic          { background: rgb(125,  57, 153);
+                           color: rgb(240, 240, 240); }
+
+.lopingian               { background: rgb(251, 167, 148); }
+.guadalupian             { background: rgb(251, 116, 92); }
+.cisuralian              { background: rgb(239,  88, 69); }
+
+.upper-pennsylvanian     { background: rgb(191, 208, 186); }
+.middle-pennsylvanian    { background: rgb(166, 199, 183); }
+.lower-pennsylvanian     { background: rgb(140, 190, 180); }
+.upper-mississippian     { background: rgb(179, 190, 108); }
+.middle-mississippian    { background: rgb(153, 180, 108); }
+.lower-mississippian     { background: rgb(128, 171, 108); }
+
+.upper-devonian          { background: rgb(241, 225, 157); }
+.middle-devonian         { background: rgb(241, 200, 104); }
+.lower-devonian          { background: rgb(229, 172, 77); }
+
+.pridoli                 { background: rgb(230, 245, 225); }
+.ludlow                  { background: rgb(191, 230, 207); }
+.wenlock                 { background: rgb(179, 225, 194); }
+.llandovery              { background: rgb(153, 215, 179); }
+
+.upper-ordovician        { background: rgb(127, 202, 147); }
+.middle-ordovician       { background: rgb( 77, 180, 126); }
+.lower-ordovician        { background: rgb( 26, 157, 111);
+                           color: rgb(240, 240, 240); }
+.furongian               { background: rgb(179, 224, 149); }
+.cambrian-series-3       { background: rgb(166, 207, 134); }
+.cambrian-series-2       { background: rgb(153, 192, 120); }
+.terreneuvian            { background: rgb(140, 176, 108); }
+
+
+/* Ages (no CGMW) */
+
+.upper-pleistocene       { background: rgb(255, 242, 211); }
+.ionian                  { background: rgb(255, 242, 199); }
+.calabrian               { background: rgb(255, 242, 186); }
+.gelasian                { background: rgb(255, 237, 179); } /* taken from Purdue RGB 2010, darker than in the 2008 colour code table */
+
+.piacenzian              { background: rgb(255, 255, 191); }
+.zanclean                { background: rgb(255, 255, 179); }
+
+.messinian               { background: rgb(255, 255, 115); }
+.tortonian               { background: rgb(255, 255, 102); }
+.serravallian            { background: rgb(255, 255,  89); }
+.langhian                { background: rgb(255, 255,  77); }
+.burdigalian             { background: rgb(255, 255,  65); }
+.aquitanian              { background: rgb(255, 255,  51); }
+
+.chattian                { background: rgb(254, 230, 170); }
+.rupelian                { background: rgb(254, 217, 154); }
+
+.priabonian              { background: rgb(253, 205, 161); }
+.bartonian               { background: rgb(253, 192, 145); }
+.lutetian                { background: rgb(252, 180, 130); }
+.ypresian                { background: rgb(252, 167, 115); }
+
+.thanetian               { background: rgb(253, 191, 111); }
+.selandian               { background: rgb(254, 191, 101); }
+.danian                  { background: rgb(253, 180,  98); }
+
+.maastrichtian           { background: rgb(242, 250, 140); }
+.campanian               { background: rgb(230, 244, 127); }
+.santonian               { background: rgb(217, 237, 116); }
+.coniacian               { background: rgb(204, 233, 104); }
+.turonian                { background: rgb(191, 227, 93); }
+.cenomanian              { background: rgb(179, 222, 83); }
+
+.albian                  { background: rgb(204, 234, 151); }
+.aptian                  { background: rgb(191, 228, 138); }
+.barremian               { background: rgb(179, 223, 127); }
+.hauterivian             { background: rgb(166, 217, 117); }
+.valanginian             { background: rgb(153, 211, 106); }
+.berriasian              { background: rgb(140, 205, 96); }
+
+.tithonian               { background: rgb(217, 241, 247); }
+.kimmeridgian            { background: rgb(204, 236, 244); }
+.oxfordian               { background: rgb(191, 231, 241); }
+
+.callovian               { background: rgb(191, 231, 229); }
+.bathonian               { background: rgb(179, 226, 227); }
+.bajocian                { background: rgb(166, 221, 224); }
+.aalenian                { background: rgb(154, 217, 221); }
+
+.toarcian                { background: rgb(153, 206, 227); }
+.pliensbachian           { background: rgb(128, 197, 221); }
+.sinemurian              { background: rgb(103, 188, 216); }
+.hettangian              { background: rgb( 78, 179, 211); }
+
+.rhaetian                { background: rgb(227, 185, 219); }
+.norian                  { background: rgb(214, 170, 211); }
+.carnian                 { background: rgb(201, 155, 203); }
+
+.ladinian                { background: rgb(201, 131, 191); }
+.anisian                 { background: rgb(188, 117, 183); }
+
+.olenekian               { background: rgb(176,  81, 165);
+                           color: rgb(240, 240, 240); }
+.induan                  { background: rgb(164,  70, 159);
+                           color: rgb(240, 240, 240); }
+
+.changhsingian           { background: rgb(252, 192, 178); }
+.wuchiaphingian          { background: rgb(252, 180, 162); }
+
+.capitanian              { background: rgb(251, 154, 133); }
+.wordian                 { background: rgb(251, 141, 118); }
+.roadian                 { background: rgb(251, 128, 105); }
+
+.kungurian               { background: rgb(227, 135, 118); }
+.artinskian              { background: rgb(227, 135, 104); }
+.sakmarian               { background: rgb(227, 111, 92); }
+.asselian                { background: rgb(227, 99, 80); }
+
+.gzhelian                { background: rgb(204, 212, 199); }
+.kasimovian              { background: rgb(191, 208, 197); }
+.moscovian               { background: rgb(199, 203, 185); }
+.bashkirian              { background: rgb(153, 194, 181); }
+
+.serpukhovian            { background: rgb(191, 194, 107); }
+.visean                  { background: rgb(166, 185, 108); }
+.tournaisian             { background: rgb(140, 176, 108); }
+
+.famennian               { background: rgb(242, 237, 197); }
+.frasnian                { background: rgb(242, 237, 173); }
+
+.givetian                { background: rgb(241, 225, 133); }
+.eifelian                { background: rgb(241, 213, 118); }
+
+.emsian                  { background: rgb(229, 208, 117); }
+.pragian                 { background: rgb(229, 196, 104); }
+.lochkovian              { background: rgb(229, 183,  90); }
+
+.ludfordian              { background: rgb(217, 240, 223); }
+.gorstian                { background: rgb(204, 236, 221); }
+
+.homerian                { background: rgb(204, 235, 209); }
+.sheinwoodian            { background: rgb(191, 230, 195); }
+
+.telychian               { background: rgb(191, 230, 207); }
+.aeronian                { background: rgb(179, 225, 194); }
+.rhuddanian              { background: rgb(166, 220, 181); }
+
+.hirnantian              { background: rgb(166, 219, 171); }
+.katian                  { background: rgb(153, 214, 159); }
+.sandbian                { background: rgb(140, 208, 148); }
+
+.darriwilian             { background: rgb(116, 198, 156);
+                           color: rgb(240, 240, 240); }
+.dapingian               { background: rgb(102, 192, 146);
+                           color: rgb(240, 240, 240); }
+
+.floian                  { background: rgb( 65, 176, 135);
+                           color: rgb(240, 240, 240); }
+.tremadocian             { background: rgb( 51, 169, 126);
+                           color: rgb(240, 240, 240); }
+
+.cambrian-stage-10       { background: rgb(230, 245, 201); }
+.cambrian-stage-9        { background: rgb(217, 240, 187); }
+.paibian                 { background: rgb(204, 235, 174); }
+
+.guzhangian              { background: rgb(204, 223, 170); }
+.drumian                 { background: rgb(191, 217, 157); }
+.cambrian-stage-5        { background: rgb(179, 212, 146); }
+
+.cambrian-stage-4        { background: rgb(179, 202, 142); }
+.cambrian-stage-3        { background: rgb(166, 197, 131); }
+
+.cambrian-stage-2        { background: rgb(166, 186, 128); }
+.fortunian               { background: rgb(153, 181, 117); }
+
+
+
+/* Some CSS for displaying the stratigraphic chart */
+
+table { border-collapse: collapse; }
+
+td.rule { border-top:    1px solid rgb(208, 208, 208);
+          border-bottom: 1px solid rgb(208, 208, 208); }
+
+td { padding: 1.6ex 0.8ex;
+     text-align: center; }
+
+td div.age { position: relative;
+             top: 2ex; }
