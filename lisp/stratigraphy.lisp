@@ -15,7 +15,7 @@
 ;;;; output file setup
 
 (defparameter *html-file* "../data/isc2009.html")
-(defparameter *json-file* "../data/isc2009.json")
+(defparameter *json-file* "../data/stratigraphic-data.js")
 
 (defparameter *print-gssp* nil)
 
@@ -58,6 +58,9 @@
 
 (defparameter *html-postscript* "</tbody></table></body></html>")
 
+(defparameter *json-preamble* "function StratigraphicData() { this.details =")
+
+(defparameter *json-postscript* "}")
 
 
 ;;;;
@@ -685,7 +688,8 @@ list of R, G, B values, optional 'bright for bright text colour.")
     ((null age)            (format stream ""))
     ((null accuracy)       (format stream "~F" age))
     ((numberp accuracy)    (format stream "~F &plusmn; ~F" age accuracy))
-    ((eq accuracy 'approx) (format stream "&asymp;~F" age))
+;    ((eq accuracy 'approx) (format stream "&asymp;~F" age))
+    ((eq accuracy 'approx) (format stream "≈~F" age))
     (t                     (error "Malformed base age: ~S, ~S" age accuracy))))
 
 (defun pretty-print-base (base-age stream &optional (age-unit "Ma"))
@@ -704,13 +708,13 @@ list of R, G, B values, optional 'bright for bright text colour.")
                             "F~@[ ~A~]")
                age age-unit))
       ((eq accuracy 'approx)
-       (format stream "~~~F~@[ ~A~]" age age-unit))
+       (format stream "≈~F~@[ ~A~]" age age-unit))
       ((eq accuracy 'coarse)
        (format stream "~D~@[ ~A~]" age age-unit))
       ((eq accuracy 'coarse-approx)
-       (format stream "~~~D~@[ ~A~]" age age-unit))
+       (format stream "≈~D~@[ ~A~]" age age-unit))
       ((eq accuracy 'approx-not-ratfd)
-       (format stream "~~~D~@[ ~A~]*" age age-unit))
+       (format stream "≈~D~@[ ~A~]*" age age-unit))
       ((eq accuracy 'undefined)
        (format stream "(undefined)"))
       (t
@@ -721,14 +725,15 @@ list of R, G, B values, optional 'bright for bright text colour.")
 
 (defmethod print-object ((obj strat-unit) stream)
   (print-unreadable-object (obj stream :type t :identity t)
-    ;;for debugging: all information
-    ;; (with-slots (name rank color bright-text
-    ;;                   base-megayears base-accuracy) obj
-    ;;   (format
-    ;;    stream
-    ;;    "~S ~A: begins ~F ± ~A; color: ~A~:[~; with bright text~]"
-    ;;    rank name base-megayears base-accuracy color bright-text))
-    (format stream "~A" (slot-value obj 'id))))
+    ;; for debugging: all information
+    (with-slots (name rank color bright-text
+                      base-megayears base-accuracy) obj
+      (format
+       stream
+       "~S ~A: begins ~F ± ~A; color: ~A~:[~; with bright text~]"
+       rank name base-megayears base-accuracy color bright-text))
+  ;    (format stream "~A" (slot-value obj 'id))
+))
 
 
 ;;; HTML table output
@@ -941,8 +946,12 @@ corresponding object.")
                (if text text ""))))))))
 
 (with-open-file (stream *json-file*
-                        :direction :output :if-exists :supersede)
+                        :direction :output :if-exists :supersede
+                        :external-format :utf-8 )
+  (format stream "~&~A~%" *json-preamble*)
   (json:encode-json (mapcar (lambda (u) (alist-of-unit-data (get-unit u)))
                             (remove-if #'keywordp
                                        (collect-leaves *hierarchy*)))
-                    stream))
+                    stream)
+  (format stream "~&~A~%" *json-postscript*))
+
