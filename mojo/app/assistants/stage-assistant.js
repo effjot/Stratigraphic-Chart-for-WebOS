@@ -84,7 +84,7 @@ StageAssistant.prototype.handleCommand = function(event) {
         case 'do-about':
             this.controller.showAlertDialog(
                 { onChoose: function(value) {},
-                  title: $L("Stratigraphy") + " "
+                  title: $L(Mojo.Controller.appInfo.title) + " "
                          + Mojo.Controller.appInfo.version,
                   message: this.aboutMessage,
                   allowHTMLMessage: true,
