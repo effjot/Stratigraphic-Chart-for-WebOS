@@ -2,9 +2,6 @@
 
 ;;;; This is all a bit ad-hoc because it's basically just various datasets thrown together...
 
-;;;; TODO:
-;;;; base-accuracy "awaiting ratified" in description!
-
 
 (defpackage :stratigraphy
   (:use :common-lisp :json))
@@ -14,10 +11,18 @@
 
 ;;;; output file setup
 
-(defparameter *html-file* "../data/isc2009.html")
+(defparameter *html-file-basename* "../data/isc2009")
+
+(defparameter *html-variants*
+  '(("no_base" nil nil)
+    ("base_age" t nil)
+    ("base_age+gssp" t t)))
+
+
 (defparameter *json-file* "../data/stratigraphic-data.js")
 
 (defparameter *print-gssp* nil)
+(defparameter *print-base-age* nil)
 
 (defparameter *html-base-age-class* "age")
 
@@ -26,12 +31,13 @@
    <html><head>
     <title>International Stratigraphic Chart 2009</title>
     <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">
-    <link rel=\"stylesheet\" href=\"stratigraphy.css\">
+    <link rel=\"stylesheet\" href=\"../stylesheets/stratigraphy.css\">
     <meta name=\"viewport\" content=\"width=320\">
    </head>
    <body>")
 
-(defparameter *html-table-head*
+(defun html-table-head (&optional (print-base-age *print-base-age*)
+                        (print-gssp *print-gssp*))
   (concatenate 'string
      "<table>
        <thead>
@@ -40,21 +46,22 @@
           <th>Erathem</th>
           <th colspan=\"2\">System</th>
           <th>Series</th>
-          <th>Stage</th>
-          <th>begins</th>"
-     (if *print-gssp* "<th>GSSP/</th>" "")
-     "  </tr>
+          <th>Stage</th>"
+     (if print-base-age "<th>begins</th>")
+     (if print-gssp "<th>GSSP/</th>")
+     "</tr>
         <tr>
           <th>Eon</th>
           <th>Era</th>
           <th colspan=\"2\">Period</th>
           <th>Epoch</th>
-          <th>Age</th>
-          <th>(Ma b.p.)</th>"
-     (if *print-gssp* "<th>GSSA</th>" "")
+          <th>Age</th>"
+     (if print-base-age "<th>(Ma b.p.)</th>")
+     (if print-gssp "<th>GSSA</th>")
        "</tr>
       </thead>
       <tbody>"))
+
 
 (defparameter *html-postscript* "</tbody></table></body></html>")
 
@@ -727,11 +734,11 @@ list of R, G, B values, optional 'bright for bright text colour.")
   (print-unreadable-object (obj stream :type t :identity t)
     ;; for debugging: all information
     (with-slots (name rank color bright-text
-                      base-megayears base-accuracy) obj
+                      base-megayears base-accuracy defined-by) obj
       (format
        stream
-       "~S ~A: begins ~F ± ~A; color: ~A~:[~; with bright text~]"
-       rank name base-megayears base-accuracy color bright-text))
+       "~S ~A: beg. ~F ± ~A, def. by ~A; col. ~A~:[~; with bright text~]"
+       rank name base-megayears base-accuracy defined-by color bright-text))
   ;    (format stream "~A" (slot-value obj 'id))
 ))
 
@@ -749,13 +756,14 @@ list of R, G, B values, optional 'bright for bright text colour.")
               (when print-link id-lower-case)
               id-lower-case name))))
 
-(defun print-html-td-age-gssp (unit stream &optional (print-gssp *print-gssp*))
+(defun print-html-td-base-info (unit stream print-base-age print-gssp)
   (with-slots (base-megayears base-accuracy defined-by) unit
-    (format stream
-            "~&<td><div class=\"~A\">~A</div></td>"
-            *html-base-age-class*
-            (pretty-print-base (cons base-megayears base-accuracy) 
-                               nil nil))
+    (when print-base-age
+      (format stream
+              "~&<td><div class=\"~A\">~A</div></td>"
+              *html-base-age-class*
+              (pretty-print-base (cons base-megayears base-accuracy) 
+                                 nil nil)))
     (when print-gssp
       (format stream
               "~&<td><div class=\"~A\">~@[~A~]</div></td>"
@@ -763,10 +771,11 @@ list of R, G, B values, optional 'bright for bright text colour.")
               defined-by))))
 
 
-(defgeneric print-html-tree (obj stream &optional print-link))
+(defgeneric print-html-tree (obj stream &optional print-base-age print-gssp print-link))
 
 (defmethod print-html-tree ((obj strat-unit) stream
-                            &optional (print-link t))
+                            &optional (print-base-age *print-base-age*)
+                            (print-gssp *print-gssp*) (print-link t))
   (labels
       ((walk (obj stream tr-printed)
          (with-slots (id name rank base-megayears base-accuracy
@@ -798,14 +807,16 @@ list of R, G, B values, optional 'bright for bright text colour.")
                   (format stream "~&<td class=\"rule\"></td>"))
                 (dotimes (i (position rank (remove :subperiod *ranks*)))
                   (format stream "~&<td class=\"rule\"></td>")))
-              (print-html-td-age-gssp obj stream)
+              (print-html-td-base-info obj stream print-base-age print-gssp)
               (format stream "~&</tr>"))))))
     (walk obj stream nil)))
 
-(defun print-html-strat-table (list-of-top-rank-units stream)
-  (format stream "~&~A~%~A" *html-preamble* *html-table-head*)
+(defun print-html-strat-table (list-of-top-rank-units stream
+                               &optional (print-base-age *print-base*) (print-gssp *print-gssp*))
+  (format stream "~&~A~%~A" *html-preamble*
+          (html-table-head print-base-age print-gssp))
   (dolist (unit list-of-top-rank-units)
-    (print-html-tree unit stream t))
+    (print-html-tree unit stream print-base-age print-gssp t))
   (format stream "~&~A~%" *html-postscript*))
 
 
@@ -914,10 +925,13 @@ corresponding object.")
                                 (reverse (remove :subperiod *ranks*)))
 
 
-;;; Write HTML file
+;;; Write HTML files
 
-(with-open-file (s *html-file* :direction :output :if-exists :supersede)
-  (print-html-strat-table *eons* s))
+(dolist (variant *html-variants*)
+  (with-open-file (stream
+                   (concatenate 'string *html-file-basename* "_" (first variant) ".html")
+                   :direction :output :if-exists :supersede)
+    (print-html-strat-table *eons* stream (second variant) (third variant))))
 
 
 ;;; Write JSON file
@@ -946,8 +960,7 @@ corresponding object.")
                (if text text ""))))))))
 
 (with-open-file (stream *json-file*
-                        :direction :output :if-exists :supersede
-                        :external-format :utf-8 )
+                        :direction :output :if-exists :supersede)
   (format stream "~&~A~%" *json-preamble*)
   (json:encode-json (mapcar (lambda (u) (alist-of-unit-data (get-unit u)))
                             (remove-if #'keywordp
