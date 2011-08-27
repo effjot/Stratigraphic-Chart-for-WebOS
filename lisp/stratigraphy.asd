@@ -1,9 +1,9 @@
 ;;;; -*- Mode: Lisp; Syntax: ANSI-Common-Lisp; Base: 10 -*-
 
-(defpackage #:stratigraphy-asd
+(defpackage #:stratigraphy-system
   (:use :cl :asdf))
 
-(in-package :stratigraphy-asd)
+(in-package :stratigraphy-system)
 
 (defsystem stratigraphy
   :name "stratigraphy"
@@ -15,4 +15,4 @@
 
   :serial t
   :components ((:file "stratigraphy"))
-  :depends-on ("cl-json"))
+  :depends-on (:cl-json))
