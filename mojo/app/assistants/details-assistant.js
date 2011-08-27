@@ -49,11 +49,13 @@ DetailsAssistant.prototype.setup = function() {
 				{itemTemplate:'details/listitem'},
 				this.listModel);
 
-    this.controller.get("rgb-code").
-        update($L("Colour (RGB):") + " " +
-               StratChart.details[this.unit].rgb[0] + ", "
-               + StratChart.details[this.unit].rgb[1] + ", "
-               + StratChart.details[this.unit].rgb[2]);
+    this.styleInfo = $L("Colour (RGB):") + " " +
+        StratChart.details[this.unit].rgb[0] + ", "
+        + StratChart.details[this.unit].rgb[1] + ", "
+        + StratChart.details[this.unit].rgb[2];
+    if (StratChart.details[this.unit].bright)
+        this.styleInfo += " " + $L("with bright text");
+    this.controller.get("style-info").update(this.styleInfo);
 
     this.controller.get("description-text").
         update(StratChart.details[this.unit].text);

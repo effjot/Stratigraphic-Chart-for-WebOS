@@ -9,6 +9,8 @@
 (defpackage :stratigraphy
   (:use :common-lisp :json))
 
+(in-package :stratigraphy)
+
 
 ;;;; output file setup
 
@@ -917,12 +919,12 @@ corresponding object.")
 
 (defun alist-of-unit-data (unit)
   "Generate alist of unit's information (for JSON export)."
-  (with-slots (id name rank base-megayears base-accuracy defined-by color text)
+  (with-slots (id name rank base-megayears base-accuracy defined-by color bright-text text)
       unit
     (let ((id-string (string-downcase (symbol-name id))))
       (cons id-string
        (pairlis
-        '(:id :name :rank :base :defined :rgb :text)
+        '(:id :name :rank :base :defined :rgb :bright :text)
         (list id-string name
               (pretty-print-rank rank nil)
               (pretty-print-base (get-base-age unit) nil)
@@ -930,6 +932,7 @@ corresponding object.")
                   (symbol-name defined-by)
                   "none")
               (list (first color) (second color) (third color))
+              (if bright-text t)
               (concatenate
                'string
                (if (eq base-accuracy 'approx-not-ratfd)
