@@ -9,7 +9,7 @@ MOJOSRCDIR=mojo
 
 .PHONY: all clean package launch install
 
-all:
+all: package
 
 clean:
 	rm -f $(MOJOIPK)
