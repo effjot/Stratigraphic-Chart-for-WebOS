@@ -6,7 +6,9 @@ function TableAssistant() {
        yet, so any initialization that needs the scene controller
        should be done in the setup function below. */
 
-    this.link = Mojo.appPath + 'data/isc2009.html';
+    this.link = Mojo.appPath + 'data/isc2009_base_age.html';
+    this.powerScroll = false;
+    this.powerScrollBounceOffset = 12;
 }
 
 
@@ -26,49 +28,50 @@ TableAssistant.prototype.setup = function() {
     this.controller.setupWidget(Mojo.Menu.appMenu, StratChart.appMenuAttr,
                                 StratChart.appMenuModel);
 
-//    var attributes = { url: this.link };
     this.controller.setupWidget('stratTable', { url: this.link,
-                                                interrogateClicks: true });
+                                                interrogateClicks: true,
+                                                showClickedLink: true });
     this.stratTableWidget = this.controller.get('stratTable');
 
     /* add event handlers to listen to events from widgets */
 
-//    this.controller.listen('stratTable', Mojo.Event.webViewLinkClicked,
-  //                         this.eventHandlerLinkDetails);
-
+    /* "Power scroll" -- flick with two fingers to top/bottom */
+    this.gestureStart = this.gestureStart.bindAsEventListener(this);
+    this.gestureEnd = this.gestureEnd.bindAsEventListener(this);
 };
 
-/*TableAssistant.prototype.started = function(event) {
 
-};
-
-TableAssistant.prototype.stopped = function(event) {
-
-};
-
-TableAssistant.prototype.finished = function(event) {
-
-};*/
-
-TableAssistant.prototype.activate = function(event) {
+TableAssistant.prototype.activate = function($super, event) {
     /* put in event handlers here that should only be in effect when
        this scene is active. For example, key handlers that are
        observing the document */
+
+    if (this.powerScroll) {
+	this.controller.listen(this.controller.stageController.document, "gesturestart", this.gestureStart);
+	this.controller.listen(this.controller.stageController.document, "gestureend", this.gestureEnd);
+    }
 
     this.eventHandlerLinkDetails = this.handleLinkDetails.bind(this);
     Mojo.Event.listen(this.stratTableWidget, Mojo.Event.webViewLinkClicked,
                       this.eventHandlerLinkDetails);
 };
 
-TableAssistant.prototype.deactivate = function(event) {
+
+TableAssistant.prototype.deactivate = function($super, event) {
     /* remove any event handlers you added in activate and do any
        other cleanup that should happen before this scene is popped or
        another scene is pushed on top */
+
+    if (this.powerScroll) {
+	this.controller.stopListening(this.controller.stageController.document, "gesturestart", this.gestureStart);
+	this.controller.stopListening(this.controller.stageController.document, "gestureend", this.gestureEnd);
+    }
 
     Mojo.Event.stopListening(this.stratTableWidget,
                              Mojo.Event.webViewLinkClicked,
                              this.eventHandlerLinkDetails);
 };
+
 
 TableAssistant.prototype.cleanup = function(event) {
     /* this function should do any cleanup needed before the scene is
@@ -83,4 +86,28 @@ TableAssistant.prototype.cleanup = function(event) {
 TableAssistant.prototype.handleLinkDetails = function(clickEvent) {
     var unit = clickEvent.url.split("/").pop();
     Mojo.Controller.stageController.pushScene("details", unit);
+};
+
+
+
+/* Power scroll handlers */
+
+TableAssistant.prototype.gestureStart = function(event) {
+	this.gestureStartY = event.centerY;
+};
+
+TableAssistant.prototype.gestureEnd = function(event) {
+    this.gestureEndY = event.centerY;
+    this.gestureDistance = this.gestureEndY - this.gestureStartY;
+    var scroller = this.controller.getSceneScroller();
+    var pos;
+    if (this.gestureDistance > 0) {
+	this.controller.getSceneScroller().mojo.revealTop();
+        pos = scroller.mojo.getScrollPosition();
+        scroller.mojo.scrollTo(0, pos.top - this.powerScrollBounceOffset, true);
+    } else if (this.gestureDistance < 0) {
+	this.controller.getSceneScroller().mojo.revealBottom();
+        pos = scroller.mojo.getScrollPosition();
+        scroller.mojo.scrollTo(0, pos.top + this.powerScrollBounceOffset, true);
+    }
 };
