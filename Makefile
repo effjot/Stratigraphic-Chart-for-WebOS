@@ -38,4 +38,5 @@ $(MOJOSRCDIR)/data/%.html: data/%.html
 	cp $< $@
 
 $(HTML):
+	test -d data || mkdir data
 	cd lisp && sbcl --script build-files.lisp
