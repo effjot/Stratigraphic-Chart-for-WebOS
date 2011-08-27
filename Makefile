@@ -8,7 +8,9 @@ MOJOSRCDIR=mojo
 
 VARIANTS=isc2009_no_base.html isc2009_base_age.html isc2009_base_age+gssp.html
 HTML=$(addprefix data/, $(VARIANTS))
-MOJOHTML=$(addprefix $(MOJOSRCDIR)/data/, $(VARIANTS))
+MOJOHTML=$(addprefix $(MOJOSRCDIR)/, $(HTML))
+JSON=data/stratigraphic-data.js
+MOJOJSON=$(addprefix $(MOJOSRCDIR)/, $(JSON))
 
 
 .PHONY: all clean package launch install
@@ -31,12 +33,20 @@ install: package
 package: $(MOJOIPK)
 
 
-$(MOJOIPK): $(MOJOHTML)
+$(MOJOIPK): $(MOJOHTML) $(MOJOJSON)
 	palm-package --exclude-from=.palm-package.exclude $(MOJOSRCDIR)
 
 $(MOJOSRCDIR)/data/%.html: data/%.html
 	cp $< $@
 
-$(HTML):
+$(MOJOSRCDIR)/data/%.js: data/%.js
+	cp $< $@
+
+$(HTML): lisp/stratigraphy.lisp
 	test -d data || mkdir data
 	cd lisp && sbcl --script build-files.lisp
+
+$(JSON): lisp/stratigraphy.lisp
+	test -d data || mkdir data
+	cd lisp && sbcl --script build-files.lisp
+
