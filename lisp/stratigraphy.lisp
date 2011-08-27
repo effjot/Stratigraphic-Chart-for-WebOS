@@ -735,8 +735,7 @@ list of R, G, B values, optional 'bright for bright text colour.")
     ;; for debugging: all information
     (with-slots (name rank color bright-text
                       base-megayears base-accuracy defined-by) obj
-      (format
-       stream
+      (format stream
        "~S ~A: beg. ~F ± ~A, def. by ~A; col. ~A~:[~; with bright text~]"
        rank name base-megayears base-accuracy defined-by color bright-text))
   ;    (format stream "~A" (slot-value obj 'id))
@@ -832,9 +831,8 @@ list of R, G, B values, optional 'bright for bright text colour.")
 
 (defparameter *units*
   (mapcar (lambda (id)
-            (format t "~&id: ~s~%" id)
-            (cons id
-                  (make-instance 'strat-unit :id id)))
+;            (format t "~&id: ~s~%" id)
+            (cons id (make-instance 'strat-unit :id id)))
           (remove-if #'keywordp (collect-leaves *hierarchy*)))
 "Flat alist of unit objects.  Key is ID; use GET-UNIT function to get the
 corresponding object.")
@@ -864,7 +862,7 @@ corresponding object.")
         (setf (slot-value unit 'base-accuracy) (fourth entry)))
       (setf (slot-value unit 'defined-by) (fifth entry)))
     (when (sixth entry)
-      (format t "text: ~A~%" (sixth entry))
+;      (format t "text: ~A~%" (sixth entry))
       (setf (slot-value unit 'text) (sixth entry)))))
 
 (dolist (entry *css*)
@@ -893,7 +891,7 @@ corresponding object.")
                  ((null tree))
 
                  ((every #'atom tree)   ; no children, just assign rank
-                  (format t "~&~s [~a]#" tree ranks)
+                  ;(format t "~&~s [~a]#" tree ranks)
                   (mapcar (lambda (x)
                             (setf (slot-value (get-unit x) 'rank)
                                   (first ranks)))
@@ -901,10 +899,10 @@ corresponding object.")
 
                  ((and (atom node)      ; node with children
                        (consp child-nodes))
-                  (format t "~&~s [~a, ~a]: " node ranks subperiod)
+                  ;(format t "~&~s [~a, ~a]: " node ranks subperiod)
                   (let ((unit (get-unit node))
                         (ch (collect-direct-children child-nodes)))
-                    (format t "~s" ch)
+                    ;(format t "~s" ch)
                     (setf (children unit)
                           (mapcar #'get-unit ch))
                     (setf (slot-value unit 'rank)
@@ -913,7 +911,7 @@ corresponding object.")
                         (if subperiod ranks (cdr ranks))))
 
                  ((every #'listp tree)  ; list of nodes with same rank
-                  (format t "~&LISTS: ~s,~%~s~%" (car tree) (cdr tree))
+                  ;(format t "~&LISTS: ~s,~%~s~%" (car tree) (cdr tree))
                   (walk (car tree) ranks)
                   (walk (cdr tree) ranks))
 
