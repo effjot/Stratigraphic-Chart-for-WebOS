@@ -38,4 +38,4 @@ $(MOJOSRCDIR)/data/%.html: data/%.html
 	cp $< $@
 
 $(HTML):
-	cd lisp && sbcl --script make-files.lisp
+	cd lisp && sbcl --script build-files.lisp
