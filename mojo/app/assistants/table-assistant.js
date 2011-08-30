@@ -6,7 +6,7 @@ function TableAssistant() {
        yet, so any initialization that needs the scene controller
        should be done in the setup function below. */
 
-    this.link = Mojo.appPath + 'data/isc2009_base_age.html';
+    this.linkBase = Mojo.appPath + "data/isc2009";
     this.powerScroll = false;
     this.powerScrollBounceOffset = 12;
 }
@@ -28,9 +28,11 @@ TableAssistant.prototype.setup = function() {
     this.controller.setupWidget(Mojo.Menu.appMenu, StratChart.appMenuAttr,
                                 StratChart.appMenuModel);
 
-    this.controller.setupWidget('stratTable', { url: this.link,
-                                                interrogateClicks: true,
-                                                showClickedLink: true });
+
+    this.stratTableWidgetModel =  { url: this.getLink(),
+                                    interrogateClicks: true,
+                                    showClickedLink: true };
+    this.controller.setupWidget('stratTable', this.stratTableWidgetModel);
     this.stratTableWidget = this.controller.get('stratTable');
 
     /* add event handlers to listen to events from widgets */
@@ -45,6 +47,11 @@ TableAssistant.prototype.activate = function($super, event) {
     /* put in event handlers here that should only be in effect when
        this scene is active. For example, key handlers that are
        observing the document */
+
+    if (StratChart.displaySettingsUpdated) {
+        this.stratTableWidget.mojo.openURL(this.getLink());
+        StratChart.displaySettingsUpdated = false;
+    }
 
     if (this.powerScroll) {
 	this.controller.listen(this.controller.stageController.document, "gesturestart", this.gestureStart);
@@ -79,6 +86,21 @@ TableAssistant.prototype.cleanup = function(event) {
 };
 
 
+/* generate link to HTML file according to prefs (base age, GSSP) */
+
+TableAssistant.prototype.getLink = function() {
+    var suffix = "no_base";
+    if (StratChart.prefs.showBaseAge) {
+        if (StratChart.prefs.showGSSP)
+            suffix = "base_age+gssp"
+        else
+            suffix = "base_age";
+    } else {
+        if (StratChart.prefs.showGSSP)
+            suffix = "base_gssp";
+    }
+    return this.linkBase + "_" + suffix + ".html";
+}
 
 
 /* after click, open details for stratigraphic unit */
