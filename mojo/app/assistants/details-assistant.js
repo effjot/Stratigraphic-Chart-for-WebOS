@@ -44,7 +44,8 @@ DetailsAssistant.prototype.setup = function() {
 
     this.listModel = {items: this.items};
 
-    // Set up the attributes & model for the List widget:
+    // set up the attributes & model for the List widget
+
     this.controller.setupWidget('details-list',
 				{itemTemplate:'details/listitem'},
 				this.listModel);
@@ -66,6 +67,24 @@ DetailsAssistant.prototype.setup = function() {
                                     label: $L("More on Wikipedia"),
                                     buttonClass: "secondary un-capitalize",
                                     disabled: false } );
+
+    // command menu for TouchPad (back button)
+
+    if (StratChart.isTouchPad()) {
+        var menuModel = {
+            visible: true,
+            items: [
+                { icon: "back", command: "go-back"}
+            ]
+        };
+        this.controller.setupWidget(Mojo.Menu.commandMenu,
+                                    this.attributes = {
+                                        spacerHeight: 0,
+                                        menuClass: 'no-fade'
+                                    },
+                                    menuModel
+                                   );
+    }
 
 
     /* add event handlers to listen to events from widgets */
@@ -90,6 +109,19 @@ DetailsAssistant.prototype.deactivate = function(event) {
 DetailsAssistant.prototype.cleanup = function(event) {
     /* this function should do any cleanup needed before the scene is
        destroyed as a result of being popped off the scene stack */
+};
+
+
+DetailsAssistant.prototype.handleCommand = function(event) {
+    if (event.type == Mojo.Event.command) {
+	this.cmd = event.command;
+
+	switch(this.cmd) {
+        case 'go-back':
+            this.controller.stageController.popScene();
+            break;
+        }
+    }
 };
 
 
