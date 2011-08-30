@@ -16,6 +16,7 @@
 (defparameter *html-variants*
   '(("no_base" nil nil)
     ("base_age" t nil)
+    ("base_gssp" nil t)
     ("base_age+gssp" t t)))
 
 
