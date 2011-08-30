@@ -3,6 +3,7 @@
 #wikipedia-button { margin-top: 32px; }
 
 #wikipedia-button.touchpad {
-    width: 45% !important;
+    width: 40% !important;
     margin: 5px auto !important;
+    margin-top: 48px !important;
 }
