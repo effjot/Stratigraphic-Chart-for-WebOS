@@ -68,7 +68,7 @@ DetailsAssistant.prototype.setup = function() {
                                     buttonClass: "secondary un-capitalize",
                                     disabled: false } );
 
-    // command menu for TouchPad (back button)
+    // add command menu (back button) and styling for TouchPad
 
     if (StratChart.isTouchPad()) {
         var menuModel = {
@@ -82,8 +82,8 @@ DetailsAssistant.prototype.setup = function() {
                                         spacerHeight: 0,
                                         menuClass: 'no-fade'
                                     },
-                                    menuModel
-                                   );
+                                    menuModel);
+        this.controller.get("wikipedia-button").addClassName("touchpad");
     }
 
 
