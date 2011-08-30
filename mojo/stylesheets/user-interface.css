@@ -1,3 +1,8 @@
 /* TODO: put your application-specific CSS here */
 
 #wikipedia-button { margin-top: 32px; }
+
+#wikipedia-button.touchpad {
+    width: 45% !important;
+    margin: 5px auto !important;
+}
