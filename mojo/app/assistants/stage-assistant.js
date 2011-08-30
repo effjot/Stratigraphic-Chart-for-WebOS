@@ -15,20 +15,40 @@ function StageAssistant() {
         + "</div>";
 
 
-    // Globals
+    /* Globals */
 
     StratChart = {};
+
+    // app menu
 
     StratChart.appMenuAttr = { omitDefaultItems: true };
     StratChart.appMenuModel = {
         items: [
-            { label: $L("About"), command: 'do-about' }
+            { label: $L("Preferences"), command: 'do-prefs' },
+            { label: $L("About"),       command: 'do-about' }
         ]
     };
 
     StratChart.wikipediaBase = "en.wikipedia.org/wiki";
 
-    StratChart.details = new StratigraphicData().details; // read data for details scene
+    // read data for details scene
+
+    StratChart.details = new StratigraphicData().details;
+
+    // preferences
+
+    this.cookie = new Mojo.Model.Cookie("StratigraphyPrefs");
+    var cookiedata = this.cookie.get();
+    if (cookiedata) {
+        StratChart.prefs = {
+            showBaseAge: cookiedata.showBaseAge,
+            showGSSP:    cookiedata.showGSSP };
+    } else {                    // no preferences saved yet
+        StratChart.prefs = {
+            showBaseAge: true,
+            showGSSP:    false };
+        this.cookie.put(StratChart.prefs);
+    };
 
 
     // Utility functions
@@ -94,6 +114,10 @@ StageAssistant.prototype.handleCommand = function(event) {
                       { label: $L("OK"), value: "" }
                   ]
                 });
+            break;
+
+        case 'do-prefs':
+            Mojo.Controller.stageController.pushScene('prefs', this);
             break;
         }
     }
