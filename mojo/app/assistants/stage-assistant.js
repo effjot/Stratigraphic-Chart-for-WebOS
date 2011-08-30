@@ -117,7 +117,7 @@ StageAssistant.prototype.handleCommand = function(event) {
             break;
 
         case 'do-prefs':
-            Mojo.Controller.stageController.pushScene('prefs', this);
+            Mojo.Controller.stageController.pushScene('prefs');
             break;
         }
     }
