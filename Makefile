@@ -1,12 +1,12 @@
 APPNAME=net.effjot.stratigraphy
-VERSION=0.2.5
+VERSION=0.2.6
 
 MOJOIPK=$(APPNAME)_$(VERSION)_all.ipk
 
 
 MOJOSRCDIR=mojo
 
-VARIANTS=isc2009_no_base.html isc2009_base_age.html isc2009_base_age+gssp.html
+VARIANTS=isc2009_no_base.html isc2009_base_age.html isc2009_base_gssp.html isc2009_base_age+gssp.html
 HTML=$(addprefix data/, $(VARIANTS))
 MOJOHTML=$(addprefix $(MOJOSRCDIR)/, $(HTML))
 JSON=data/stratigraphic-data.js
