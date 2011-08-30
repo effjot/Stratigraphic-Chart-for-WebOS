@@ -8,5 +8,9 @@
     {
         "scenes": "details",
         "source": "app/assistants/details-assistant.js"
+    },
+    {
+        "scenes": "prefs",
+        "source": "app/assistants/prefs-assistant.js"
     }
 ]
