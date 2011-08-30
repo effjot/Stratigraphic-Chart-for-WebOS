@@ -15,5 +15,6 @@
   "none":             "keiner/keines",
   "Colour (RGB):":    "Farbe (RGB):",
   "with bright text": "mit heller Schrift",
-  "More on Wikipedia":       "Mehr auf Wikipedia (engl.)"
+  "More on Wikipedia":       "Mehr auf Wikipedia (engl.)",
+  "Preferences":      "Einstellungen"
 }
