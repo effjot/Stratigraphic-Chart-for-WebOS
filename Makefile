@@ -1,5 +1,5 @@
 APPNAME=net.effjot.stratigraphy
-VERSION=0.2.6
+VERSION=0.2.7
 
 MOJOIPK=$(APPNAME)_$(VERSION)_all.ipk
 
