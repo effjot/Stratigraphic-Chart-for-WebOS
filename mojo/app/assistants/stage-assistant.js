@@ -56,6 +56,15 @@ function StageAssistant() {
         return wikiname;
     };
 
+
+    StratChart.isTouchPad = function(){
+        /* Detect TouchPad device; from http://www.precentral.net/developer-how-to-mojo-apps-touchpad */
+        if (Mojo.Environment.DeviceInfo.modelNameAscii.indexOf("ouch") > -1)
+            return true;
+        if(Mojo.Environment.DeviceInfo.screenWidth == 1024){ return true; }
+        if(Mojo.Environment.DeviceInfo.screenHeight == 1024){ return true; }
+        return false;
+    };
 };
 
 
