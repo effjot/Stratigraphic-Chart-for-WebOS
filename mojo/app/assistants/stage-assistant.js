@@ -19,6 +19,8 @@ function StageAssistant() {
 
     StratChart = {};
 
+    StratChart.displaySettingsUpdated = false;
+
     // app menu
 
     StratChart.appMenuAttr = { omitDefaultItems: true };
