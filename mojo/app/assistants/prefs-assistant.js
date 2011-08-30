@@ -74,8 +74,10 @@ PrefsAssistant.prototype.cleanup = function(event) {
 
 PrefsAssistant.prototype.toggleBaseAgeHandler = function(event) {
     StratChart.prefs.showBaseAge = event.value;
+    StratChart.displaySettingsUpdated = true;
 };
 
 PrefsAssistant.prototype.toggleGSSPHandler = function(event) {
     StratChart.prefs.showGSSP = event.value;
+    StratChart.displaySettingsUpdated = true;
 };
