@@ -1,4 +1,4 @@
-/* TODO: put your application-specific CSS here */
+/* application-specific CSS here */
 
 #wikipedia-button { margin-top: 32px; }
 
@@ -6,4 +6,9 @@
     width: 40% !important;
     margin: 5px auto !important;
     margin-top: 48px !important;
+}
+
+.pref-icon {
+  margin: 10px 10px 0px 20px;
+  float: left;
 }
