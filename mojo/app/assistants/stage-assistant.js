@@ -99,14 +99,21 @@ StageAssistant.prototype.setup = function() {
 
 
 
-/* App Menu ("About" info) */
+/* handle Commands (App menu; back button for Touchpad */
 
 StageAssistant.prototype.handleCommand = function(event) {
-    this.controller = Mojo.Controller.stageController.activeScene();
+    Mojo.Log.info("StageAssistant...handleCommand()");
+    var currentScene = Mojo.Controller.stageController.activeScene();
     if (event.type == Mojo.Event.command) {
+        Mojo.Log.info("StageAssistant...handleCommand(): event.command =", event.command);
         switch(event.command) {
+
+        case 'go-back':
+            Mojo.Controller.stageController.popScene();
+            break;
+
         case 'do-about':
-            this.controller.showAlertDialog(
+            currentScene.showAlertDialog(
                 { onChoose: function(value) {},
                   title: $L(Mojo.Controller.appInfo.title) + " "
                          + Mojo.Controller.appInfo.version,
@@ -119,7 +126,7 @@ StageAssistant.prototype.handleCommand = function(event) {
             break;
 
         case 'do-prefs':
-            Mojo.Controller.stageController.pushScene('prefs');
+            Mojo.Controller.stageController.pushScene("prefs");
             break;
         }
     }
