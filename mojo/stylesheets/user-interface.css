@@ -8,6 +8,9 @@
     margin-top: 48px !important;
 }
 
+.hide { display: none; }
+.show { display: block !important; }
+
 .pref-icon {
   margin: 10px 10px 0px 20px;
   float: left;
