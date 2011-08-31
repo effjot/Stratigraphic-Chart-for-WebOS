@@ -3,6 +3,8 @@ function PrefsAssistant() {
        additional parameters (after the scene name) that were passed to pushScene. The reference
        to the scene controller (this.controller) has not be established yet, so any initialization
        that needs the scene controller should be done in the setup function below. */
+
+    this.cookie = new Mojo.Model.Cookie("StratigraphyPrefs");
 }
 
 PrefsAssistant.prototype.setup = function() {
@@ -23,6 +25,25 @@ PrefsAssistant.prototype.setup = function() {
     };
     this.controller.setupWidget(Mojo.Menu.appMenu, this.appMenuAttr, this.appMenuModel);
 
+    // add command menu (back button) for TouchPad
+
+    if (StratChart.isTouchPad()) {
+        var menuModel = {
+            visible: true,
+            items: [
+                { icon: "back", command: "go-back"}
+            ]
+        };
+        this.controller.setupWidget(Mojo.Menu.commandMenu,
+                                    this.attributes = {
+                                        spacerHeight: 0,
+                                        menuClass: 'no-fade'
+                                    },
+                                    menuModel);
+    } else {
+        this.controller.get("touchpad-warning").addClassName("hide");
+    }
+
     // initialize settings widgets
 
     this.controller.setupWidget("toggleBaseAge", {},
@@ -34,19 +55,21 @@ PrefsAssistant.prototype.setup = function() {
 
     /* add event handlers to listen to events from widgets */
 
-    this.toggleBaseAgeListener = this.toggleBaseAgeHandler.bindAsEventListener(this);
-    Mojo.Event.listen(this.controller.get('toggleBaseAge'), Mojo.Event.propertyChange,
-                      this.toggleBaseAgeListener);
+    this.toggleBaseAgeHandler = this.handleToggleBaseAge.bindAsEventListener(this);
+    this.toggleGSSPHandler = this.handleToggleGSSP.bindAsEventListener(this);
 
-    this.toggleGSSPListener = this.toggleGSSPHandler.bindAsEventListener(this);
-    Mojo.Event.listen(this.controller.get('toggleGSSP'), Mojo.Event.propertyChange,
-                      this.toggleGSSPListener);
 };
 
 PrefsAssistant.prototype.activate = function(event) {
     /* put in event handlers here that should only be in effect when
        this scene is active. For example, key handlers that are
        observing the document */
+
+    Mojo.Event.listen(this.controller.get("toggleBaseAge"), Mojo.Event.propertyChange,
+                      this.toggleBaseAgeHandler);
+
+    Mojo.Event.listen(this.controller.get("toggleGSSP"), Mojo.Event.propertyChange,
+                      this.toggleGSSPHandler);
 };
 
 PrefsAssistant.prototype.deactivate = function(event) {
@@ -54,30 +77,29 @@ PrefsAssistant.prototype.deactivate = function(event) {
        other cleanup that should happen before this scene is popped or
        another scene is pushed on top */
 
-    var cookie = new Mojo.Model.Cookie("StratigraphyPrefs");
-    cookie.put(StratChart.prefs);
+    Mojo.Event.stopListening(this.controller.get("toggleBaseAge"), Mojo.Event.propertyChange,
+                             this.toggleBaseAgeHandler);
+
+    Mojo.Event.stopListening(this.controller.get('toggleGSSP'), Mojo.Event.propertyChange,
+                             this.toggleGSSPHandler);
 };
 
 PrefsAssistant.prototype.cleanup = function(event) {
     /* this function should do any cleanup needed before the scene is
        destroyed as a result of being popped off the scene stack */
-
-    Mojo.Event.stopListening(this.controller.get('toggleBaseAge'), Mojo.Event.propertyChange,
-                             this.toggleBaseAgeListener);
-
-    Mojo.Event.stopListening(this.controller.get('toggleGSSP'), Mojo.Event.propertyChange,
-                             this.toggleGSSPListener);
 };
 
 
-/* Handlers for buttons */
+/* Handlers for settings (toggle buttons) */
 
-PrefsAssistant.prototype.toggleBaseAgeHandler = function(event) {
+PrefsAssistant.prototype.handleToggleBaseAge = function(event) {
     StratChart.prefs.showBaseAge = event.value;
     StratChart.displaySettingsUpdated = true;
+    this.cookie.put(StratChart.prefs);
 };
 
-PrefsAssistant.prototype.toggleGSSPHandler = function(event) {
+PrefsAssistant.prototype.handleToggleGSSP = function(event) {
     StratChart.prefs.showGSSP = event.value;
     StratChart.displaySettingsUpdated = true;
+    this.cookie.put(StratChart.prefs);
 };
