@@ -40,8 +40,7 @@ PrefsAssistant.prototype.setup = function() {
                                         menuClass: 'no-fade'
                                     },
                                     menuModel);
-    } else {
-        this.controller.get("touchpad-warning").addClassName("hide");
+        this.controller.get("touchpad-warning").addClassName("show");
     }
 
     // initialize settings widgets
