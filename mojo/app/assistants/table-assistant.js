@@ -28,29 +28,37 @@ TableAssistant.prototype.setup = function() {
     this.controller.setupWidget(Mojo.Menu.appMenu, StratChart.appMenuAttr,
                                 StratChart.appMenuModel);
 
+    this.stratTableWidgetAttr =  { url: this.getLink(),
+                                   interrogateClicks: true,
+                                   showClickedLink: true };
+    this.controller.setupWidget("stratTable", this.stratTableWidgetAttr);
+    this.stratTableWidget = this.controller.get("stratTable");
 
-    this.stratTableWidgetModel =  { url: this.getLink(),
-                                    interrogateClicks: true,
-                                    showClickedLink: true };
-    this.controller.setupWidget('stratTable', this.stratTableWidgetModel);
-    this.stratTableWidget = this.controller.get('stratTable');
 
     /* add event handlers to listen to events from widgets */
 
-    /* "Power scroll" -- flick with two fingers to top/bottom */
+    this.linkToDetailsHandler = this.handleLinkToDetails.bindAsEventListener(this);
+
+    // "Power scroll" -- flick with two fingers to top/bottom
     this.gestureStart = this.gestureStart.bindAsEventListener(this);
     this.gestureEnd = this.gestureEnd.bindAsEventListener(this);
 };
 
 
-TableAssistant.prototype.activate = function($super, event) {
+TableAssistant.prototype.activate = function(event) {
     /* put in event handlers here that should only be in effect when
        this scene is active. For example, key handlers that are
        observing the document */
 
     if (StratChart.displaySettingsUpdated) {
-        this.stratTableWidget.mojo.openURL(this.getLink());
-        StratChart.displaySettingsUpdated = false;
+        Mojo.Log.info("TableAssistant.activate(): displaySettingsUpdated");
+        if (StratChart.isTouchPad()) {
+            Mojo.Log.info("TableAssistant.activate(): openURL() not possible on TouchPad");
+        } else {
+            this.stratTableWidget.mojo.openURL(this.getLink());
+            Mojo.Log.info("TableAssistant...activate(): openURL() called");
+        }
+        StratChart.displaySettingsUpdated;
     }
 
     if (this.powerScroll) {
@@ -58,13 +66,12 @@ TableAssistant.prototype.activate = function($super, event) {
 	this.controller.listen(this.controller.stageController.document, "gestureend", this.gestureEnd);
     }
 
-    this.eventHandlerLinkDetails = this.handleLinkDetails.bind(this);
     Mojo.Event.listen(this.stratTableWidget, Mojo.Event.webViewLinkClicked,
-                      this.eventHandlerLinkDetails);
+                      this.linkToDetailsHandler);
 };
 
 
-TableAssistant.prototype.deactivate = function($super, event) {
+TableAssistant.prototype.deactivate = function(event) {
     /* remove any event handlers you added in activate and do any
        other cleanup that should happen before this scene is popped or
        another scene is pushed on top */
@@ -76,7 +83,7 @@ TableAssistant.prototype.deactivate = function($super, event) {
 
     Mojo.Event.stopListening(this.stratTableWidget,
                              Mojo.Event.webViewLinkClicked,
-                             this.eventHandlerLinkDetails);
+                             this.linkToDetailsHandler);
 };
 
 
@@ -99,14 +106,17 @@ TableAssistant.prototype.getLink = function() {
         if (StratChart.prefs.showGSSP)
             suffix = "base_gssp";
     }
+    Mojo.Log.info("getLink(): link =", this.linkBase + "_" + suffix + ".html");
     return this.linkBase + "_" + suffix + ".html";
 }
 
 
 /* after click, open details for stratigraphic unit */
 
-TableAssistant.prototype.handleLinkDetails = function(clickEvent) {
-    var unit = clickEvent.url.split("/").pop();
+TableAssistant.prototype.handleLinkToDetails = function(event) {
+    Mojo.Log.info("handleLinkToDetails(), event.type =", event.type, "event.url =", event.url);
+
+    var unit = event.url.split("/").pop();
     Mojo.Controller.stageController.pushScene("details", unit);
 };
 
