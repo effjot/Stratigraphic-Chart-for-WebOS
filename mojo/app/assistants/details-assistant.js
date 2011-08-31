@@ -89,8 +89,7 @@ DetailsAssistant.prototype.setup = function() {
 
     /* add event handlers to listen to events from widgets */
 
-    this.controller.listen("wikipedia-button", Mojo.Event.tap,
-                           this.handleUpdate.bind(this));
+    this.wikipediaButtonHandler = this.handleWikipediaButton.bindAsEventListener(this);
 
 };
 
@@ -98,12 +97,18 @@ DetailsAssistant.prototype.activate = function(event) {
     /* put in event handlers here that should only be in effect when
        this scene is active. For example, key handlers that are
        observing the document */
+
+    this.controller.listen("wikipedia-button", Mojo.Event.tap,
+                           this.wikipediaButtonHandler);
 };
 
 DetailsAssistant.prototype.deactivate = function(event) {
     /* remove any event handlers you added in activate and do any
        other cleanup that should happen before this scene is popped or
        another scene is pushed on top */
+
+    this.controller.stopListening("wikipedia-button", Mojo.Event.tap,
+                                  this.wikipediaButtonHandler);
 };
 
 DetailsAssistant.prototype.cleanup = function(event) {
@@ -111,21 +116,7 @@ DetailsAssistant.prototype.cleanup = function(event) {
        destroyed as a result of being popped off the scene stack */
 };
 
-
-DetailsAssistant.prototype.handleCommand = function(event) {
-    if (event.type == Mojo.Event.command) {
-	this.cmd = event.command;
-
-	switch(this.cmd) {
-        case 'go-back':
-            this.controller.stageController.popScene();
-            break;
-        }
-    }
-};
-
-
-DetailsAssistant.prototype.handleUpdate = function(event) {
+DetailsAssistant.prototype.handleWikipediaButton = function(event) {
     this.controller.
         serviceRequest("palm://com.palm.applicationManager", {
                            method: "open",
