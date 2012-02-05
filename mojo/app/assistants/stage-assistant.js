@@ -3,7 +3,7 @@ function StageAssistant() {
 
     this.aboutMessage =
         "<div style=\"float: right\"><img src=\"images/fj-logo.png\"></div>"
-        + $L("Copyright 2011, Florian Jenn.") + " "
+        + $L("Copyright 2011, 2012 Florian Jenn.") + " "
         + "<a href=\""
         + Mojo.Controller.appInfo.vendorurl
         + "\">www.effjot.net</a><br/>"
