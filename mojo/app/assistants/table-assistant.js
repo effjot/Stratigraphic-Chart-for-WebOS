@@ -52,13 +52,13 @@ TableAssistant.prototype.activate = function(event) {
 
     if (StratChart.displaySettingsUpdated) {
         Mojo.Log.info("TableAssistant.activate(): displaySettingsUpdated");
-        if (StratChart.isTouchPad()) {
-            Mojo.Log.info("TableAssistant.activate(): openURL() not possible on TouchPad");
+        if (StratChart.isTouchPad() || StratChart.isPre3()) {
+            Mojo.Log.info("TableAssistant.activate(): openURL() not possible on TouchPad and Pre3");
         } else {
             this.stratTableWidget.mojo.openURL(this.getLink());
             Mojo.Log.info("TableAssistant...activate(): openURL() called");
         }
-        StratChart.displaySettingsUpdated;
+        StratChart.displaySettingsUpdated = false;
     }
 
     if (this.powerScroll) {
