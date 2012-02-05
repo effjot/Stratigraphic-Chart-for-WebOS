@@ -83,11 +83,20 @@ function StageAssistant() {
         /* Detect TouchPad device; from http://www.precentral.net/developer-how-to-mojo-apps-touchpad */
         if (Mojo.Environment.DeviceInfo.modelNameAscii.indexOf("ouch") > -1)
             return true;
-        if(Mojo.Environment.DeviceInfo.screenWidth == 1024){ return true; }
-        if(Mojo.Environment.DeviceInfo.screenHeight == 1024){ return true; }
+        if (Mojo.Environment.DeviceInfo.screenWidth  == 1024) return true;
+        if (Mojo.Environment.DeviceInfo.screenHeight == 1024) return true;
         return false;
     };
-};
+
+    StratChart.isPre3 = function(){
+        /* Detect Pre3 device; adapted from isTouchpad() above  */
+        if (Mojo.Environment.DeviceInfo.modelNameAscii.indexOf("re3") > -1)
+            return true;
+        if (Mojo.Environment.DeviceInfo.screenWidth  == 800) return true;
+        if (Mojo.Environment.DeviceInfo.screenHeight == 800) return true;
+        return false;
+    };
+}
 
 
 StageAssistant.prototype.setup = function() {
@@ -95,8 +104,7 @@ StageAssistant.prototype.setup = function() {
        stage is first created */
 
     this.controller.pushScene("table");
-};
-
+}
 
 
 /* handle Commands (App menu; back button for Touchpad */
@@ -130,4 +138,4 @@ StageAssistant.prototype.handleCommand = function(event) {
             break;
         }
     }
-};
+}
