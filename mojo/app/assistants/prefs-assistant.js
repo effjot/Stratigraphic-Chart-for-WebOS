@@ -40,6 +40,11 @@ PrefsAssistant.prototype.setup = function() {
                                         menuClass: 'no-fade'
                                     },
                                     menuModel);
+    }
+
+    // show "restart to apply" message for Touchpad and Pre3
+
+    if (StratChart.isTouchPad() || StratChart.isPre3()) {
         this.controller.get("touchpad-warning").addClassName("show");
     }
 
