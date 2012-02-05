@@ -5,6 +5,8 @@ function PrefsAssistant() {
        that needs the scene controller should be done in the setup function below. */
 
     this.cookie = new Mojo.Model.Cookie("StratigraphyPrefs");
+    this.isTouchPad = StratChart.isTouchPad();
+    this.isPre3     = StratChart.isPre3();
 }
 
 PrefsAssistant.prototype.setup = function() {
@@ -27,7 +29,7 @@ PrefsAssistant.prototype.setup = function() {
 
     // add command menu (back button) for TouchPad
 
-    if (StratChart.isTouchPad()) {
+    if (this.isTouchPad) {
         var menuModel = {
             visible: true,
             items: [
@@ -44,7 +46,7 @@ PrefsAssistant.prototype.setup = function() {
 
     // show "restart to apply" message for Touchpad and Pre3
 
-    if (StratChart.isTouchPad() || StratChart.isPre3()) {
+    if (this.isTouchPad || this.isPre3) {
         this.controller.get("touchpad-warning").addClassName("show");
     }
 
@@ -62,7 +64,7 @@ PrefsAssistant.prototype.setup = function() {
     this.toggleBaseAgeHandler = this.handleToggleBaseAge.bindAsEventListener(this);
     this.toggleGSSPHandler = this.handleToggleGSSP.bindAsEventListener(this);
 
-};
+}
 
 PrefsAssistant.prototype.activate = function(event) {
     /* put in event handlers here that should only be in effect when
@@ -74,7 +76,7 @@ PrefsAssistant.prototype.activate = function(event) {
 
     Mojo.Event.listen(this.controller.get("toggleGSSP"), Mojo.Event.propertyChange,
                       this.toggleGSSPHandler);
-};
+}
 
 PrefsAssistant.prototype.deactivate = function(event) {
     /* remove any event handlers you added in activate and do any
@@ -86,12 +88,12 @@ PrefsAssistant.prototype.deactivate = function(event) {
 
     Mojo.Event.stopListening(this.controller.get('toggleGSSP'), Mojo.Event.propertyChange,
                              this.toggleGSSPHandler);
-};
+}
 
 PrefsAssistant.prototype.cleanup = function(event) {
     /* this function should do any cleanup needed before the scene is
        destroyed as a result of being popped off the scene stack */
-};
+}
 
 
 /* Handlers for settings (toggle buttons) */
@@ -100,10 +102,10 @@ PrefsAssistant.prototype.handleToggleBaseAge = function(event) {
     StratChart.prefs.showBaseAge = event.value;
     StratChart.displaySettingsUpdated = true;
     this.cookie.put(StratChart.prefs);
-};
+}
 
 PrefsAssistant.prototype.handleToggleGSSP = function(event) {
     StratChart.prefs.showGSSP = event.value;
     StratChart.displaySettingsUpdated = true;
     this.cookie.put(StratChart.prefs);
-};
+}
