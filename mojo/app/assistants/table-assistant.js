@@ -9,8 +9,6 @@ function TableAssistant() {
     this.linkBase = Mojo.appPath + "data/isc2009";
     this.powerScroll = true;
     this.powerScrollBounceOffset = 12;
-    this.isTouchPad = StratChart.isTouchPad();
-    this.isPre3     = StratChart.isPre3();
 }
 
 
@@ -52,14 +50,14 @@ TableAssistant.prototype.activate = function(event) {
        this scene is active. For example, key handlers that are
        observing the document */
 
+    Mojo.Event.stopListening(this.stratTableWidget,
+                             Mojo.Event.webViewLinkClicked,
+                             this.linkToDetailsHandler);
+
     if (StratChart.displaySettingsUpdated) {
         Mojo.Log.info("TableAssistant.activate(): displaySettingsUpdated");
-        if (this.isTouchPad /*|| this.isPre3 */) {
-            Mojo.Log.info("TableAssistant.activate(): openURL() not possible on TouchPad and Pre3");
-        } else {
-            this.stratTableWidget.mojo.openURL(this.getLink());
-            Mojo.Log.info("TableAssistant...activate(): openURL() called");
-        }
+        this.stratTableWidget.mojo.openURL(this.getLink());
+        Mojo.Log.info("TableAssistant...activate(): openURL() called");
         StratChart.displaySettingsUpdated = false;
     }
 
@@ -123,6 +121,10 @@ TableAssistant.prototype.handleLinkToDetails = function(event) {
     Mojo.Log.info("handleLinkToDetails(), event.type =", event.type, "event.url =", event.url);
 
     var unit = event.url.split("/").pop();
+    if (unit.indexOf(".html") > -1) {
+        Mojo.Log.info("Spurious click event after returning from preferences --> ignored.");
+        return;
+    }
     Mojo.Controller.stageController.pushScene("details", unit);
 }
 
