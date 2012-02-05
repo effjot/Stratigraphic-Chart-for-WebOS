@@ -7,8 +7,10 @@ function TableAssistant() {
        should be done in the setup function below. */
 
     this.linkBase = Mojo.appPath + "data/isc2009";
-    this.powerScroll = false;
+    this.powerScroll = true;
     this.powerScrollBounceOffset = 12;
+    this.isTouchPad = StratChart.isTouchPad();
+    this.isPre3     = StratChart.isPre3();
 }
 
 
@@ -40,9 +42,9 @@ TableAssistant.prototype.setup = function() {
     this.linkToDetailsHandler = this.handleLinkToDetails.bindAsEventListener(this);
 
     // "Power scroll" -- flick with two fingers to top/bottom
-    this.gestureStart = this.gestureStart.bindAsEventListener(this);
-    this.gestureEnd = this.gestureEnd.bindAsEventListener(this);
-};
+    this.powerGestureStartHandler = this.powerGestureStart.bindAsEventListener(this);
+    this.powerGestureEndHandler = this.powerGestureEnd.bindAsEventListener(this);
+}
 
 
 TableAssistant.prototype.activate = function(event) {
@@ -52,7 +54,7 @@ TableAssistant.prototype.activate = function(event) {
 
     if (StratChart.displaySettingsUpdated) {
         Mojo.Log.info("TableAssistant.activate(): displaySettingsUpdated");
-        if (StratChart.isTouchPad() || StratChart.isPre3()) {
+        if (this.isTouchPad /*|| this.isPre3 */) {
             Mojo.Log.info("TableAssistant.activate(): openURL() not possible on TouchPad and Pre3");
         } else {
             this.stratTableWidget.mojo.openURL(this.getLink());
@@ -62,13 +64,15 @@ TableAssistant.prototype.activate = function(event) {
     }
 
     if (this.powerScroll) {
-	this.controller.listen(this.controller.stageController.document, "gesturestart", this.gestureStart);
-	this.controller.listen(this.controller.stageController.document, "gestureend", this.gestureEnd);
+	this.controller.listen(this.controller.stageController.document, "gesturestart",
+                               this.powerGestureStartHandler);
+	this.controller.listen(this.controller.stageController.document, "gestureend",
+                               this.powerGestureEndHandler);
     }
 
     Mojo.Event.listen(this.stratTableWidget, Mojo.Event.webViewLinkClicked,
                       this.linkToDetailsHandler);
-};
+}
 
 
 TableAssistant.prototype.deactivate = function(event) {
@@ -77,20 +81,22 @@ TableAssistant.prototype.deactivate = function(event) {
        another scene is pushed on top */
 
     if (this.powerScroll) {
-	this.controller.stopListening(this.controller.stageController.document, "gesturestart", this.gestureStart);
-	this.controller.stopListening(this.controller.stageController.document, "gestureend", this.gestureEnd);
+	this.controller.stopListening(this.controller.stageController.document, "gesturestart",
+                                      this.powerGestureStartHandler);
+	this.controller.stopListening(this.controller.stageController.document, "gestureend",
+                                      this.powerGestureEndHandler);
     }
 
     Mojo.Event.stopListening(this.stratTableWidget,
                              Mojo.Event.webViewLinkClicked,
                              this.linkToDetailsHandler);
-};
+}
 
 
 TableAssistant.prototype.cleanup = function(event) {
     /* this function should do any cleanup needed before the scene is
        destroyed as a result of being popped off the scene stack */
-};
+}
 
 
 /* generate link to HTML file according to prefs (base age, GSSP) */
@@ -99,7 +105,7 @@ TableAssistant.prototype.getLink = function() {
     var suffix = "no_base";
     if (StratChart.prefs.showBaseAge) {
         if (StratChart.prefs.showGSSP)
-            suffix = "base_age+gssp"
+            suffix = "base_age+gssp";
         else
             suffix = "base_age";
     } else {
@@ -118,17 +124,17 @@ TableAssistant.prototype.handleLinkToDetails = function(event) {
 
     var unit = event.url.split("/").pop();
     Mojo.Controller.stageController.pushScene("details", unit);
-};
+}
 
 
 
 /* Power scroll handlers */
 
-TableAssistant.prototype.gestureStart = function(event) {
+TableAssistant.prototype.powerGestureStart = function(event) {
 	this.gestureStartY = event.centerY;
-};
+}
 
-TableAssistant.prototype.gestureEnd = function(event) {
+TableAssistant.prototype.powerGestureEnd = function(event) {
     this.gestureEndY = event.centerY;
     this.gestureDistance = this.gestureEndY - this.gestureStartY;
     var scroller = this.controller.getSceneScroller();
@@ -142,4 +148,4 @@ TableAssistant.prototype.gestureEnd = function(event) {
         pos = scroller.mojo.getScrollPosition();
         scroller.mojo.scrollTo(0, pos.top + this.powerScrollBounceOffset, true);
     }
-};
+}
